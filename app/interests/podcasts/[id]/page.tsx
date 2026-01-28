@@ -55,7 +55,7 @@ export default async function PodcastPage({ params }: PageProps) {
                         <div className="flex items-center gap-3 mb-2">
                             {meta.favorite && (
                                 <span className="inline-block px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded-full">
-                                    Favorite
+                                    Favourite
                                 </span>
                             )}
                             <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Podcast</span>

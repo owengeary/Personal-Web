@@ -77,7 +77,7 @@ export default async function InterestsPage() {
                         <h4 className="font-bold text-lg text-gray-900 mb-0.5 group-hover:text-purple-600 transition-colors">{podcast.title}</h4>
                         {podcast.favorite && (
                             <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded-full">
-                                Fav
+                                Favourite
                             </span>
                         )}
                     </div>
