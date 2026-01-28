@@ -82,7 +82,6 @@ export default async function InterestsPage() {
                         )}
                     </div>
                     <p className="text-sm text-gray-500 mb-2">Hosted by {podcast.host}</p>
-                    <p className="text-sm text-gray-600 line-clamp-2">{podcast.description}</p>
                 </div>
             </div>
         </Link>
