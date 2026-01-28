@@ -1,5 +1,6 @@
 import { LucideGithub, LucideLinkedin, LucideMail, FileText } from "lucide-react";
 import Link from "next/link";
+import { EducationSection } from "@/components/EducationSection";
 
 export default function AboutPage() {
     return (
@@ -7,23 +8,18 @@ export default function AboutPage() {
             <header className="mb-12">
                 <h1 className="text-4xl font-bold tracking-tight mb-4 text-gray-900 dark:text-white">About Me</h1>
                 <p className="text-xl text-gray-600 dark:text-gray-400">
-                    Quantitative Developer & Researcher combining math, code, and finance.
+                    Final Year Mathematics Student & Aspiring Quantitative Analyst
                 </p>
             </header>
 
             <section className="mb-12 prose dark:prose-invert max-w-none">
                 <p>
-                    Hi, I'm Owen Geary. I have a passion for unravelling the complexities of financial markets through
-                    rigorous quantitative analysis and robust software engineering.
+                    Hi, I'm Owen Geary. I am a highly analytical and motivated final year Mathematics student with a strong aptitude for
+                    quantitative analysis and complex problem solving.
                 </p>
                 <p>
-                    My journey began with a strong foundation in mathematics and computer science, which naturally led me
-                    to the world of quantitative finance. I enjoy building systems that process vast amounts of data to
-                    extract meaningful signals and automate trading decisions.
-                </p>
-                <p>
-                    When I'm not coding backtests or reading research papers, you can find me hiking, playing chess,
-                    or exploring new coffee shops in the city.
+                    I am keen to apply these skills in a fast-paced, challenging role within investment banking,
+                    contributing to financial modelling and data-driven decision making.
                 </p>
             </section>
 
@@ -32,19 +28,31 @@ export default function AboutPage() {
                 <div className="space-y-8">
                     {/* Experience Item 1 */}
                     <div className="border-l-2 border-gray-200 dark:border-gray-700 pl-4">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Quantitative Researcher Intern</h3>
-                        <p className="text-gray-500 text-sm mb-2">Hedge Fund X • Summer 2024</p>
-                        <p className="text-gray-600 dark:text-gray-400">
-                            Researched and implemented alpha signals using alternative data sources. Optimized backtesting engine performance by 40%.
-                        </p>
-                    </div>
-                    {/* Experience Item 2 */}
-                    <div className="border-l-2 border-gray-200 dark:border-gray-700 pl-4">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Computer Science Student</h3>
-                        <p className="text-gray-500 text-sm mb-2">University of Technology • 2021 - 2025</p>
-                        <p className="text-gray-600 dark:text-gray-400">
-                            Focusing on Machine Learning, Stochastic Calculus, and High Performance Computing.
-                        </p>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Associate Personal Banker</h3>
+                        <p className="text-gray-500 text-sm mb-2">NatWest • June 2022 - Present</p>
+                        <ul className="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-400 marker:text-gray-400">
+                            <li>
+                                Managed the end-to-end resolution of complex and sensitive customer queries, managing expectations and navigating internal bank processes to deliver timely and appropriate solutions.
+                            </li>
+                            <li>
+                                Conducted critical risk assessments and enhanced due diligence on high-value transactions (including CHAPs), applying customer protection policies and analytical discretion.
+                            </li>
+                            <li>
+                                Acted as a key liaison between retail clients and specialist internal divisions, analysing customer profiles and initiating dialogue to prepare smooth and successful referrals.
+                            </li>
+                            <li>
+                                Performed rigorous KYC and AML procedures for new and existing customers, ensuring strict adherence to FCA regulation and internal compliance protocols.
+                            </li>
+                            <li>
+                                Provided critical on-call support across NatWest branches, exceeding expectations while rapidly integrating with new teams.
+                            </li>
+                            <li>
+                                Sought out and completed advanced training modules, developing skills and pursuing interest in areas of quantitative finance and ML.
+                            </li>
+                            <li>
+                                Ensured 100% accuracy in daily transaction reporting and customer data entry, meeting procedural standards and mitigating operational risk.
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </section>
@@ -74,6 +82,8 @@ export default function AboutPage() {
                     </div>
                 </div>
             </section>
+
+            <EducationSection />
 
             <section>
                 <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Connect</h2>
