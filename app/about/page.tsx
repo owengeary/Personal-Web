@@ -88,15 +88,15 @@ export default function AboutPage() {
             <section>
                 <h2 className="text-2xl font-bold mb-6 text-gray-900">Connect</h2>
                 <div className="flex gap-4">
-                    <Link href="https://github.com" target="_blank" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                    <Link href="https://github.com/owengeary" target="_blank" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
                         <LucideGithub size={20} />
                         <span>GitHub</span>
                     </Link>
-                    <Link href="https://linkedin.com" target="_blank" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                    <Link href="https://www.linkedin.com/in/owen-geary-19a77626a" target="_blank" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
                         <LucideLinkedin size={20} />
                         <span>LinkedIn</span>
                     </Link>
-                    <Link href="mailto:owen@example.com" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                    <Link href="mailto:ob.geary@gmail.com" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
                         <LucideMail size={20} />
                         <span>Email</span>
                     </Link>
