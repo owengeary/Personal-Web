@@ -28,13 +28,13 @@ export default async function PodcastPage({ params }: PageProps) {
 
     return (
         <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <Link href="/interests" className="inline-flex items-center text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white mb-8 transition-colors">
+            <Link href="/interests" className="inline-flex items-center text-gray-500 hover:text-gray-900 mb-8 transition-colors">
                 <ChevronLeft className="w-4 h-4 mr-1" />
                 Back to Interests
             </Link>
 
             {/* Overview Card */}
-            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 shadow-sm mb-12">
+            <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm mb-12">
                 <div className="flex flex-col sm:flex-row gap-8 items-start">
                     <div className="w-40 h-40 relative bg-gray-100 rounded-2xl overflow-hidden flex-shrink-0 shadow-md">
                         {meta.image ? (
@@ -54,18 +54,18 @@ export default async function PodcastPage({ params }: PageProps) {
                     <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
                             {meta.favorite && (
-                                <span className="inline-block px-2 py-1 bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 text-xs font-bold rounded-full">
+                                <span className="inline-block px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded-full">
                                     Favorite
                                 </span>
                             )}
                             <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Podcast</span>
                         </div>
 
-                        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-2 leading-tight">{meta.title}</h1>
-                        <p className="text-xl text-gray-600 dark:text-gray-400 mb-6">Hosted by <span className="font-semibold">{meta.host}</span></p>
+                        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2 leading-tight">{meta.title}</h1>
+                        <p className="text-xl text-gray-600 mb-6">Hosted by <span className="font-semibold">{meta.host}</span></p>
 
                         {meta.description && (
-                            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl">
+                            <p className="text-gray-600 mb-6 max-w-2xl">
                                 {meta.description}
                             </p>
                         )}
@@ -74,8 +74,8 @@ export default async function PodcastPage({ params }: PageProps) {
             </div>
 
             {/* Review Content - Separate Section */}
-            <div className="prose prose-lg dark:prose-invert max-w-none">
-                <h2 className="text-2xl font-bold border-b dark:border-gray-800 pb-4 mb-6">Why I Listen</h2>
+            <div className="prose prose-lg max-w-none">
+                <h2 className="text-2xl font-bold border-b pb-4 mb-6">Why I Listen</h2>
                 {content}
             </div>
         </div>
