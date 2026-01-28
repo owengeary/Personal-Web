@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@layer theme {
+  :root {
+    --background: 248 250 252;
+    /* slate-50 */
+    --foreground: 15 23 42;
+    /* slate-900 */
+    --card: 255 255 255;
+    /* white */
+    --card-foreground: 15 23 42;
+  }
+
+  .dark {
+    --background: 15 23 42;
+    /* slate-900 (Rich dark blue-grey, not black) */
+    --foreground: 241 245 249;
+    /* slate-100 */
+    --card: 30 41 59;
+    /* slate-800 (Lighter than BG for contrast) */
+    --card-foreground: 241 245 249;
+  }
+}
+
+/* Custom dark mode handling if manual preference is needed later, 
+   but for now relying on system via standard media query or class strategy if toggles added */
+
+body {
+  background-color: var(--background);
+  /* Fallback to CSS var directly to avoid @apply order issues */
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Math/KaTeX adjustments if necessary */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
