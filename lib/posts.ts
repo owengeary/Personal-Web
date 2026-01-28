@@ -26,6 +26,7 @@ export interface PostMeta {
     host?: string
     image?: string
     favorite?: boolean
+    pinned?: boolean
 }
 
 export interface Post {
@@ -42,7 +43,13 @@ export async function getPostBySlug(type: PostType, slug: string): Promise<Post 
 
     const fileContent = fs.readFileSync(filePath, 'utf8')
 
-    const { frontmatter, content } = await compileMDX<{ title: string; date: string; description?: string; tags?: string[] }>({
+    const { frontmatter, content } = await compileMDX<{
+        title: string
+        date: string
+        description?: string
+        tags?: string[]
+        pinned?: boolean
+    }>({
         source: fileContent,
         options: {
             parseFrontmatter: true,
@@ -82,10 +89,14 @@ export async function getAllPosts(type: PostType): Promise<PostMeta[]> {
             })
     )
 
-    // Filter out undefined and sort by date
+    // Filter out undefined and sort by pinned then date
     return posts
         .filter((post): post is PostMeta => post !== undefined)
         .sort((a, b) => {
+            // Sort pinned posts first
+            if (a.pinned && !b.pinned) return -1
+            if (!a.pinned && b.pinned) return 1
+
             if (a.date && b.date) {
                 return a.date > b.date ? -1 : 1
             }
