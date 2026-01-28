@@ -1,17 +1,17 @@
 import Link from 'next/link'
 import { getAllPosts } from '@/lib/posts'
 
-export default async function ResearchPage() {
-    const posts = await getAllPosts('research')
+export default async function BlogPage() {
+    const posts = await getAllPosts('blog')
 
     return (
         <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight mb-8">Research</h1>
+            <h1 className="text-3xl font-bold tracking-tight mb-8">Blog</h1>
             <div className="space-y-8">
                 {posts.map((post) => (
                     <Link
                         key={post.slug}
-                        href={`/research/${post.slug}`}
+                        href={`/blog/${post.slug}`}
                         className="block p-6 border-b hover:bg-gray-50 transition-colors"
                     >
                         <h2 className="text-2xl font-semibold mb-2">{post.title}</h2>

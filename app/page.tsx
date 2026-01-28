@@ -6,9 +6,11 @@ import { ParallaxHero } from "@/components/ParallaxHero";
 export default async function Home() {
   const projects = await getAllPosts('projects')
   const research = await getAllPosts('research')
+  const blog = await getAllPosts('blog')
 
   const recentProjects = projects.slice(0, 2)
   const recentResearch = research.slice(0, 2)
+  const recentBlog = blog.slice(0, 1)
 
   return (
     <div className="space-y-0"> {/* Removed vertical spacing to let sections touch */}
@@ -46,7 +48,7 @@ export default async function Home() {
         </section>
 
         {/* Recent Research */}
-        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900">Latest Research</h2>
             <Link href="/research" className="group flex items-center text-blue-600 hover:text-blue-500">
@@ -59,6 +61,37 @@ export default async function Home() {
                 key={post.slug}
                 href={`/research/${post.slug}`}
                 className="block p-6 hover:bg-gray-50 rounded-xl transition-colors border-l-4 border-transparent hover:border-blue-500 bg-card border border-gray-100"
+              >
+                <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
+                <div className="flex items-center text-sm text-gray-500 mb-2">
+                  <time>{post.date}</time>
+                  {post.tags && (
+                    <>
+                      <span className="mx-2">•</span>
+                      <span>{post.tags.join(', ')}</span>
+                    </>
+                  )}
+                </div>
+                <p className="text-gray-600">{post.description}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Latest Blog */}
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900">Latest Blog</h2>
+            <Link href="/blog" className="group flex items-center text-blue-600 hover:text-blue-500">
+              View all <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+          <div className="space-y-6">
+            {recentBlog.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="block p-6 hover:bg-gray-50 rounded-xl transition-colors border-l-4 border-transparent hover:border-purple-500 bg-card border border-gray-100"
               >
                 <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
                 <div className="flex items-center text-sm text-gray-500 mb-2">

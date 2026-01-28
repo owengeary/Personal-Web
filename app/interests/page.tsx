@@ -75,11 +75,18 @@ export default async function InterestsPage() {
                 <div className="flex-1">
                     <div className="flex justify-between items-start">
                         <h4 className="font-bold text-lg text-gray-900 mb-0.5 group-hover:text-purple-600 transition-colors">{podcast.title}</h4>
-                        {podcast.favorite && (
-                            <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded-full">
-                                Favourite
-                            </span>
-                        )}
+                        <div className="flex flex-wrap gap-2 mt-1">
+                            {podcast.favorite && (
+                                <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-bold rounded-full">
+                                    Favourite
+                                </span>
+                            )}
+                            {podcast.tags?.map(tag => (
+                                <span key={tag} className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
                     </div>
                     <p className="text-sm text-gray-500 mb-2">Hosted by {podcast.host}</p>
                 </div>

@@ -6,7 +6,7 @@ import rehypeKatex from 'rehype-katex'
 
 const contentDir = path.join(process.cwd(), 'content')
 
-export type PostType = 'projects' | 'research' | 'books' | 'podcasts'
+export type PostType = 'projects' | 'research' | 'books' | 'podcasts' | 'blog'
 
 export interface PostMeta {
     title: string
