@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Owen Geary | Quant",
+  title: "Owen Geary",
   description: "Quantitative researcher and developer portfolio.",
 };
 
