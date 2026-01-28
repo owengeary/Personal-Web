@@ -6,13 +6,13 @@ export default function AboutPage() {
     return (
         <div className="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
             <header className="mb-12">
-                <h1 className="text-4xl font-bold tracking-tight mb-4 text-gray-900 dark:text-white">About Me</h1>
-                <p className="text-xl text-gray-600 dark:text-gray-400">
+                <h1 className="text-4xl font-bold tracking-tight mb-4 text-gray-900">About Me</h1>
+                <p className="text-xl text-gray-600">
                     Final Year Mathematics Student & Aspiring Quantitative Analyst
                 </p>
             </header>
 
-            <section className="mb-12 prose dark:prose-invert max-w-none">
+            <section className="mb-12 prose max-w-none">
                 <p>
                     Hi, I'm Owen Geary. I am a highly analytical and motivated final year Mathematics student with a strong aptitude for
                     quantitative analysis and complex problem solving.
@@ -24,13 +24,13 @@ export default function AboutPage() {
             </section>
 
             <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Experience</h2>
+                <h2 className="text-2xl font-bold mb-6 text-gray-900">Experience</h2>
                 <div className="space-y-8">
                     {/* Experience Item 1 */}
-                    <div className="border-l-2 border-gray-200 dark:border-gray-700 pl-4">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Associate Personal Banker</h3>
+                    <div className="border-l-2 border-gray-200 pl-4">
+                        <h3 className="text-lg font-semibold text-gray-900">Associate Personal Banker</h3>
                         <p className="text-gray-500 text-sm mb-2">NatWest • June 2022 - Present</p>
-                        <ul className="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-400 marker:text-gray-400">
+                        <ul className="list-disc list-inside space-y-2 text-gray-600 marker:text-gray-400">
                             <li>
                                 Managed the end-to-end resolution of complex and sensitive customer queries, managing expectations and navigating internal bank processes to deliver timely and appropriate solutions.
                             </li>
@@ -58,23 +58,23 @@ export default function AboutPage() {
             </section>
 
             <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Technical Skills</h2>
+                <h2 className="text-2xl font-bold mb-6 text-gray-900">Technical Skills</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                        <h3 className="font-semibold mb-2 text-gray-900 dark:text-white">Languages</h3>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                        <h3 className="font-semibold mb-2 text-gray-900">Languages</h3>
                         <div className="flex flex-wrap gap-2">
                             {['Python', 'C++', 'TypeScript', 'SQL', 'Rust'].map(skill => (
-                                <span key={skill} className="px-2 py-1 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded text-sm">
+                                <span key={skill} className="px-2 py-1 bg-white border border-gray-200 rounded text-sm">
                                     {skill}
                                 </span>
                             ))}
                         </div>
                     </div>
-                    <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                        <h3 className="font-semibold mb-2 text-gray-900 dark:text-white">Technologies & Tools</h3>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                        <h3 className="font-semibold mb-2 text-gray-900">Technologies & Tools</h3>
                         <div className="flex flex-wrap gap-2">
                             {['Pandas', 'NumPy', 'PyTorch', 'Next.js', 'Docker', 'AWS'].map(skill => (
-                                <span key={skill} className="px-2 py-1 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded text-sm">
+                                <span key={skill} className="px-2 py-1 bg-white border border-gray-200 rounded text-sm">
                                     {skill}
                                 </span>
                             ))}
@@ -86,21 +86,21 @@ export default function AboutPage() {
             <EducationSection />
 
             <section>
-                <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Connect</h2>
+                <h2 className="text-2xl font-bold mb-6 text-gray-900">Connect</h2>
                 <div className="flex gap-4">
-                    <Link href="https://github.com" target="_blank" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">
+                    <Link href="https://github.com" target="_blank" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
                         <LucideGithub size={20} />
                         <span>GitHub</span>
                     </Link>
-                    <Link href="https://linkedin.com" target="_blank" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">
+                    <Link href="https://linkedin.com" target="_blank" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
                         <LucideLinkedin size={20} />
                         <span>LinkedIn</span>
                     </Link>
-                    <Link href="mailto:owen@example.com" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">
+                    <Link href="mailto:owen@example.com" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
                         <LucideMail size={20} />
                         <span>Email</span>
                     </Link>
-                    <Link href="/resume.pdf" target="_blank" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">
+                    <Link href="/resume.pdf" target="_blank" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
                         <FileText size={20} />
                         <span>Resume</span>
                     </Link>

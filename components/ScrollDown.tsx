@@ -17,14 +17,14 @@ export function ScrollDown() {
                 })
             }}
         >
-            <span className="text-sm font-medium text-gray-400 dark:text-gray-500 uppercase tracking-widest">
+            <span className="text-sm font-medium text-gray-400 uppercase tracking-widest">
                 Scroll to Explore
             </span>
             <motion.div
                 animate={{ y: [0, 5, 0] }}
                 transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
             >
-                <ChevronDown className="w-6 h-6 text-gray-400 dark:text-gray-500" />
+                <ChevronDown className="w-6 h-6 text-gray-400" />
             </motion.div>
         </motion.div>
     )

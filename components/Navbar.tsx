@@ -21,7 +21,7 @@ export function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
 
     return (
-        <nav className="fixed w-full z-50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-gray-200 dark:border-zinc-800 transition-colors duration-300">
+        <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
                     <div className="flex-shrink-0 flex items-center gap-3">
@@ -32,11 +32,11 @@ export function Navbar() {
                                     src="/logo_og.png"
                                     alt="OG"
                                     fill
-                                    className="object-contain dark:invert"
+                                    className="object-contain"
                                     priority
                                 />
                             </div>
-                            <span className="font-bold text-xl tracking-tight text-gray-900 dark:text-white hidden sm:block">
+                            <span className="font-bold text-xl tracking-tight text-gray-900 hidden sm:block">
                                 Owen Geary
                             </span>
                         </Link>
@@ -51,14 +51,14 @@ export function Navbar() {
                                 className={clsx(
                                     'inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 transition-colors duration-200',
                                     pathname === item.href
-                                        ? 'border-blue-500 text-gray-900 dark:text-white'
-                                        : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-zinc-700'
+                                        ? 'border-blue-500 text-gray-900'
+                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 )}
                             >
                                 {item.name}
                             </Link>
                         ))}
-                        {/* <div className="pl-4 border-l border-gray-200 dark:border-zinc-800 ml-4">
+                        {/* <div className="pl-4 border-l border-gray-200 ml-4">
                             <ThemeToggle />
                         </div> */}
                     </div>
@@ -68,7 +68,7 @@ export function Navbar() {
                         {/* <ThemeToggle /> */}
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline-none"
+                            className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-900 focus:outline-none"
                         >
                             <span className="sr-only">Open main menu</span>
                             {isOpen ? <X className="block h-6 w-6" /> : <Menu className="block h-6 w-6" />}
@@ -79,7 +79,7 @@ export function Navbar() {
 
             {/* Mobile menu */}
             {isOpen && (
-                <div className="sm:hidden border-t dark:border-gray-800">
+                <div className="sm:hidden border-t">
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                         {navItems.map((item) => (
                             <Link
@@ -89,8 +89,8 @@ export function Navbar() {
                                 className={clsx(
                                     'block px-3 py-2 rounded-md text-base font-medium',
                                     pathname === item.href
-                                        ? 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white'
-                                        : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+                                        ? 'bg-gray-100 text-gray-900'
+                                        : 'text-gray-500 hover:text-gray-900'
                                 )}
                             >
                                 {item.name}

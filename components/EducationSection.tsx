@@ -76,25 +76,25 @@ export function EducationSection() {
 
     return (
         <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Education</h2>
+            <h2 className="text-2xl font-bold mb-6 text-gray-900">Education</h2>
 
-            <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6 border border-gray-100 dark:border-gray-800">
+            <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
                 <div className="mb-6">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">University of Manchester</h3>
-                    <p className="text-gray-500 dark:text-gray-400">2022 - Present</p>
+                    <h3 className="text-xl font-bold text-gray-900">University of Manchester</h3>
+                    <p className="text-gray-500">2022 - Present</p>
                 </div>
 
                 <div className="space-y-3">
                     {years.map((year, index) => (
                         <div
                             key={index}
-                            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
+                            className="bg-white border border-gray-200 rounded-lg overflow-hidden"
                         >
                             <button
                                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                                className="w-full px-4 py-3 flex items-center justify-between text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-750"
+                                className="w-full px-4 py-3 flex items-center justify-between text-left transition-colors hover:bg-gray-50"
                             >
-                                <span className="font-medium text-gray-900 dark:text-white">{year.title}</span>
+                                <span className="font-medium text-gray-900">{year.title}</span>
                                 <ChevronDown
                                     className={clsx(
                                         "w-5 h-5 text-gray-500 transition-transform duration-200",
@@ -111,10 +111,10 @@ export function EducationSection() {
                                         exit={{ height: 0, opacity: 0 }}
                                         transition={{ duration: 0.2 }}
                                     >
-                                        <div className="px-4 pb-4 pt-1 border-t border-gray-100 dark:border-gray-700/50">
+                                        <div className="px-4 pb-4 pt-1 border-t border-gray-100">
                                             <ul className="space-y-2 mt-2">
                                                 {year.details.map((detail, i) => (
-                                                    <li key={i} className="flex items-start gap-2 text-gray-600 dark:text-gray-300 text-sm">
+                                                    <li key={i} className="flex items-start gap-2 text-gray-600 text-sm">
                                                         <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
                                                         <span>{detail}</span>
                                                     </li>

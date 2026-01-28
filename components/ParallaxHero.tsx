@@ -23,11 +23,11 @@ export function ParallaxHero() {
                 style={{ y: backgroundY }}
                 className="absolute inset-0 z-0"
             >
-                <div className="absolute inset-0 bg-zinc-50 dark:bg-zinc-950 transition-colors duration-300" />
+                <div className="absolute inset-0 bg-zinc-50 transition-colors duration-300" />
                 {/* Blobs: Lighter in light mode, very subtle in dark mode */}
-                <div className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] rounded-full bg-blue-200/40 blur-[100px] dark:bg-blue-900/10 mix-blend-multiply dark:mix-blend-normal animate-blob" />
-                <div className="absolute -bottom-[20%] -right-[10%] w-[70%] h-[70%] rounded-full bg-purple-200/40 blur-[100px] dark:bg-purple-900/10 mix-blend-multiply dark:mix-blend-normal animate-blob animation-delay-2000" />
-                <div className="absolute top-[20%] right-[20%] w-[60%] h-[60%] rounded-full bg-cyan-200/40 blur-[100px] dark:bg-cyan-900/10 mix-blend-multiply dark:mix-blend-normal animate-blob animation-delay-4000" />
+                <div className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] rounded-full bg-blue-200/40 blur-[100px] mix-blend-multiply animate-blob" />
+                <div className="absolute -bottom-[20%] -right-[10%] w-[70%] h-[70%] rounded-full bg-purple-200/40 blur-[100px] mix-blend-multiply animate-blob animation-delay-2000" />
+                <div className="absolute top-[20%] right-[20%] w-[60%] h-[60%] rounded-full bg-cyan-200/40 blur-[100px] mix-blend-multiply animate-blob animation-delay-4000" />
             </motion.div>
 
             {/* Content that fades out */}
