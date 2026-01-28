@@ -12,15 +12,7 @@
     --card-foreground: 15 23 42;
   }
 
-  .dark {
-    --background: 15 23 42;
-    /* slate-900 (Rich dark blue-grey, not black) */
-    --foreground: 241 245 249;
-    /* slate-100 */
-    --card: 30 41 59;
-    /* slate-800 (Lighter than BG for contrast) */
-    --card-foreground: 241 245 249;
-  }
+
 }
 
 /* Custom dark mode handling if manual preference is needed later, 
