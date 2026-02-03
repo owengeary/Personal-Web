@@ -1,0 +1,19 @@
+---
+title: "Volatility Surface Modelling Rabbit Hole"
+date: "02 February 2026"
+description: "Diving head first into the world of volatility modeelling"
+tags: ["Research", "Update"]
+pinned: true
+---
+
+# Volatility Surface Modelling Rabbit Hole
+
+Who knew that behind the Black-Scholes equation lies a whole new world of pricing? 
+
+Well most people I imagine, myself included. It is the natural next step of anyone who wants to one day sit at a trading desk (or spend hours in their bedroom playing with 3D graphs). Nevertheless, you can't help but be amazed when you you first get hands on with the thing itself; hence the reason for the update. I had seen quite a lot of these models online, through pages on instagram and people showcasing their work on LinkedIn. So you can imagine my delight when the topic finally came across my path whilst developing a section of my Master's project. I was tasked with writing up an overview of the kinds of financial models over the years, how they have changed and what makes them different. Black-Scholes-Merton was of course the starting point, Heston was the second, and for the third I intend to find a more recent paper to see what is being using in the banks as we speak. The section on Black-Scholes went smoothly, it is a very familiar point of reference for anyone who has studied financial maths. The section on the Heston model however, took me down a rabbit hole from which I am yet to return. 
+
+As a reference for this particular section I called upon Jim Gatheral's "The Volatility Surface: A Practitioner's Guide", a text which is deemed to be the bible for this particular topic. I can't say I have many frames of reference, yet I am so far inclined to agree. Upon reading the first few chapters, I realised that my project would beenfit from an additional chapter, on the Dupire Model. For those who don't know, one of the main weaknesses (and strengths) of the Black-Scholes model is that it assumes a constant value for the volatility, $\sigma$. We wish to relax this condition, as it limits our ability to price things accuratley. The Heston model treats the volatility as a stochastic process, which is desirable and probably the most realistic interpretation. The Dupire model on the other hand, does the in between; treating the volatiltiy as a determinisitc function that depends on the price and of course time. It was this discovery that set me on the path leading to this post.
+
+I love the technical stuff and if you are reading this I imagine you do to. So lets start to introduce some now.
+
+Using the Black-Scholes pricing formula, we can reverse engineer a new metric called implied volatility from option that are trading on the market as we speak. The idea being that the price is governed by the volatility and the price of that stock at the time. Since there is only one unknown in this equation (we know the price of the option as they are being traded) we can now solve for the volatility. This implied volatility reflects the markets current beliefs (and also biases) about a particular option and its underlying stock. Luckily for us, there are loads of these options trading at any given time. All with different strike prices and maturity dates. If we calculate the implied volatility for all of these, we now start to get a picture of how the volatility changes with respect to both time and strike price. This idea is the basis for volatility surface modelling. 
