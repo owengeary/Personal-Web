@@ -1,0 +1,436 @@
+---
+title: "Predicting Credit Default Using Applications Data"
+date: "2024-05-21"
+description: "A Bayesian regression analysis to predict credit default using two software packages, R2jags and rstan."
+tags: ["R", "Bayesian Statistics", "JAGS", "Stan", "Finance"]
+---
+
+> **Abstract**
+> This project uses two Bayesian software packages, **R2jags** [1] and **rstan** [2], under a Bayesian regression framework to analyse the relationship between an applicant's information and credit default. Using 36,457 observations of five covariates, the analysis showed a significant negative correlation between an applicant's number of family members and the years they have been employed with respect to the chance of that applicant defaulting. The two models were consistent with each other, showing no significant differences between **jags** and **stan** in any of *DIC*, *BIC* and *LPML*.
+
+## Introduction
+
+This project aims to find the relationship between the probability of a applicant defaulting in the future on their credit card and the information provided to the lender when the application was first made. This can then be used to form a prediction of the probability that some new applicant will default in the future, allowing the lender to assign risk to a given applicant. This methodology forms the basis of many financial industries, such as credit analysis and insurance, where the lender or insurer aims to assign a risk to an application so that they can price/decline the contract accordingly.
+
+This project provides a very crude and limited insight into how credit lenders might price a contract based upon an individual's application information.
+
+## A Motivating Example
+
+A customer walks into a bank and fills out an application for a loan of £4000. The banker knows very little about this person, as they have never met before, they only have the information on the loan application form. Luckily for the banker, their employer has been in business for a long time and they have lots of historical information about previous customers. The banker wants to assign a probability of default to this customer, so that they can set a fair interest rate or politely decline the customer's application. Rather than looking back at all the previous customer records, they want a system where they can input the data and retrieve this probability. The banker hasn't been working for the bank for very long, so their intuition is very limited. Their only prior belief is that each variable has a limited effect, meaning that there is no one variable which can predict future default on its own. This situation is perfect for Bayesian regression.
+
+## The Dataset
+
+The dataset used in this project can be found on Kaggle [3]. The data is split into two parts: application records and credit records. Both files are available as a .csv file. Descriptions of the datasets in their entirety can also be found at [3].
+
+### Application Record
+In the application records all of the information about an application can be found, identified by an ID. The raw data consists of 438557 observations of 18 variables. For brevity we will only describe the variables which are necessary or that are used in the models which are as follows: *ID*; Customer identifier, *CNT_CHILDREN*; Number of children, *AMT_INCOME_TOTAL*; Annual income, *DAYS_BIRTH*; Days since birth (negative value), *DAYS_EMPLOYED*; Days since start of employment (negative value), *CNT_FAM_MEMBERS*; Number of family members in household.
+
+### Credit Record
+The credit record file raw data consists of 1048575 observations of 3 variables, detailing a specific customer's payment status with the corresponding point in time. The variables are as follows: *ID*; Customer identifier, *MONTHS_BALANCE*; The month of observation relative to date of extraction (negative value), *STATUS*; Payment status (0: 1-29 days past due. 1: 30-59 days past due. 2: 60-89 days overdue. 3: 90-119 days overdue. 4: 120-149 days overdue. 5: Overdue or bad debts, write-offs for more than 150 days. C: paid off that month X: No loan for the month).
+
+## Data Cleaning and Preparation
+
+In the raw data there were some very clear structural problems. In the applications data there were rows with matching *ID*'s that corresponded to different applications. To deal with this a strict removal of such rows was implemented, ensuring each application could be correctly matched with the corresponding credit record information. Where an applicant was a pensioner, a value of 365243 had been assigned to the *DAYS_EMPLOYED*, this was changed to 0 to indicate that they are no longer working. The variables *DAYS_EMPLOYED* and *DAYS_BIRTH* were transformed to their natural analogues *Years_Employed* (non-negative) and *Age* (non-negative). Assuming 365 days per year, not 365.25 as would be accurate.
+
+To prepare the credit records data for analysis, a new data frame was created using the information from the raw data. Grouping the observations by *ID*, new variables were created which were more informative than the raw data. Again, for brevity some are omitted, they are as follows: *Total_Months*; Length of loan history, *Months_Over_60_Days_Due*; Amount of months where the customer was over sixty days due, *Sixty_Day_Delinquency_Rate*; *Months_Over_60_Days_Due* / *Total_Months*.
+
+This allowed the creation of the response variable, *Default*, a binary 0 or 1 indicating if the customer had "defaulted" which was determined by a non-zero value for *Sixty_Day_Delinquency_Rate*. The two datasets were then merged, matching the *ID*'s which had corresponding entries. This resulted in a new data frame of 36457 observations.
+
+It is important to note that the data is heavily skewed towards those not in default, this is a natural consequence of credit lending and its effects cannot be overstated. To build on this project, one might implement machine learning using a training and test data set to effectively monitor the models accuracy. Such approaches were considered, but were deemed to be outside of the scope of this project and its objectives.
+
+The quantitative data was then scaled to prevent large values such as income from dominating smaller values like the number of children. The qualitative data was encoded using a one-hot encoding method, creating dummy indicator variables for each variable. The decision was made to only use the scaled quantitative data, due to complexity concerns. Further analysis of the qualitative data would make for an interesting extension of this project.
+
+## Bayesian Regression Modelling
+
+The Bayesian regression was carried out using two **R** packages: **R2jags** and **rstan**. Both used the same linear predictor
+
+$$
+\underline{\eta} = \underline{\beta_0} + \underline{\underline{X}} \cdot\underline{\beta}
+$$
+
+Where $X$ is the design matrix containing the scaled quantitative data. The responses were modelled as Bernoulli random variables
+
+$$
+\underline{Y} \sim Bernoulli(\underline{P})
+$$
+
+Where the probability vector $P$ is linked to the linear predictor through the logistic (logit) link function
+
+$$
+\log\left(\frac{P_i}{1-P_i}\right) = \eta_i
+$$
+
+With the following priors
+
+$$
+\beta_i \sim N(0, 10),  \forall i \in 0,\dots,5
+$$
+
+Chosen to be deliberately uninformative. By centring them at zero, the observed data has to inform any non-zero choice of the intercept and coefficients. The zero mean also penalises large values of beta, which makes sense because we don't expect any of the covariates to extremely affect the probability of default. Note that using the normal distribution centred at zero is equivalent to performing Ridge (or L2) regression, which penalises large values. By choosing a large variance the priors allow the data to explain the relationships almost entirely by itself, the presence of the priors provides a "safety net", preventing extremely large values and providing a starting off point for the models to work from. The normal distribution was chosen because not only does it match the support of the coefficients, but it is symmetric which reflects our prior belief of not knowing whether or not a particular covariate will have a positive or negative effect.
+
+To evaluate the convergence of the models, traceplots were generated for each of the model parameters. In both sets of plots we see that the values oscillate around the mean, leading to the "fuzzy caterpillar" look that we expect to see in convergent chains. The overlapping of the different colours of chains indicates good mixing, suggesting that they are all drawing from the same target distribution.
+
+## Inference and Comparison
+
+From the summaries of the models we see that they both draw the same conclusions. In both models $\beta_1$, $\beta_2$ and $\beta_4$ are deemed to be insignificant at a $5\%$ significance level. With $\beta_0$, $\beta_3$ and $\beta_5$ all being significant and negatively valued. Therefore we can infer that for any given customer there is a low chance of default($\beta_0$), decreased further by larger values of family members($\beta_3$) and the years that the applicant has been employed($\beta_5$).
+
+The extremely close values in *DIC*, *BIC* and *LPML* show that the models were about as effective as each other. We often choose models based off of lower *DIC* and *BIC* or higher values of *LPML*, however they are so close in this instance that it isn't suitable to draw these conclusions. Instead the **stan** model should be seen as a verification of the **jags** model.
+
+### Predictive Example
+
+Finally, we consider an example of a new customers application data. Where we arbitrarily set *CNT_CHILDREN* = 0, *AMT_INCOME_TOTAL* = 150000, *CNT_FAM_MEMBERS* = 2, *AGE* = 45, *YEARS_EMPLOYED* = 10. The new observation needs to be scaled in the same way as before, using the observed means and standard deviations. In this example we consider the samples drawn from the **jags** model, computing the log odds and in turn the predicted probabilities. For this particular example the mean predicted probability was $0.62\%$ with a $95\%$ credible interval of $0.5\%$ to $0.76\%$. This predicted probability can be interpreted as the level of risk associated with this particular customer. Unlike standard logistic regression which gives a single point estimate, this method assures the banker that the risk is almost certainly below $1\%$. This solves the problem posed in the motivating example of our banker trying to assign risk to a given application.
+
+## References
+
+1. Su Y, Yajima M (2024). _R2jags: Using R to Run 'JAGS'_. R package version 0.8-9, https://CRAN.R-project.org/package=R2jags.
+2. Stan Development Team (2025). RStan: the R interface to Stan. R package version 2.32.7. https://mc-stan.org/.
+3. MoneyMan (2019). *Credit card approval prediction*. [Online] Kaggle. Available at: https://www.kaggle.com/datasets/rikdifos/credit-card-approval-prediction [Accessed: 15 December 2025].
+
+---
+
+## Analysis Code
+
+The following R code was used to perform the analysis, including data cleaning, JAGS modelling, and Stan modelling.
+
+```r
+#install.packages("janitor")
+#install.packages("tidyverse")
+#install.packages("fastDummies")
+#install.packages("rstan")
+#install.packages("ggplot2")
+#install.packages("dplyr")
+#install.packages("R2jags")
+#install.packages("coda")
+library(fastDummies)
+library(janitor)
+library(tidyverse)
+library(dplyr)
+library(R2jags)
+library(rstan)
+library(coda)
+library(ggplot2)
+
+
+#Load the data
+# Note: Ensure these CSV files are in the working directory
+# Application_Record = read.csv("application_record.csv", header = TRUE)
+# Application_Record_Raw = read.csv("application_record.csv", header = TRUE)
+# Credit_Record = read.csv("credit_record.csv", header = TRUE)
+# Credit_Record_Raw = read.csv("credit_record.csv", header = TRUE)
+
+# ... [Trimming file read for display, assume files are loaded]
+
+#Check for duplicates
+# get_dupes(Application_Record, ID) #Check application records for duplicated ID's
+# get_dupes(Credit_Record) #Check credit records for duplicated rows
+
+#Remove any row which was duplicated
+Application_Record <- Application_Record %>%
+  group_by(ID) %>%
+  filter(n() == 1) %>%
+  ungroup()
+
+#Check for missing values
+colSums(is.na(Application_Record))
+colSums(is.na(Credit_Record))
+
+#Check for empty strings
+colSums(Application_Record == "")
+colSums(Credit_Record == "")
+
+#Assign a value to the missing strings in application record
+Application_Record[Application_Record == ""] <- "Unknown"
+colSums(Application_Record == "")
+
+#Check to see if it has worked
+Application_Record$OCCUPATION_TYPE
+
+#Find the number of ID's that we have both sets of data for
+length(intersect(Application_Record$ID, Credit_Record$ID))
+
+#Prepare the data in credit records
+Credit_Record_2 <- Credit_Record %>% 
+  group_by(ID) %>%
+  summarise(
+    Start_Month = min(MONTHS_BALANCE),
+    End_Month = max(MONTHS_BALANCE),
+    Duration = End_Month - Start_Month,
+    Total_Months = n(),
+    Months_Over_60_Days_Due = sum(STATUS %in% c("3", "4", "5")),
+    Months_Over_30_Days_Due = sum(STATUS %in% c("2", "3", "4", "5")),
+    Months_Over_0_Days_Due = sum(STATUS %in% c("1", "2", "3", "4", "5")),
+    Sixty_Day_Delinquency_Rate = Months_Over_60_Days_Due / Total_Months,
+    Thirty_Day_Delinquency_Rate = Months_Over_30_Days_Due / Total_Months,
+    Delinquency_Rate = Months_Over_0_Days_Due / Total_Months
+  ) %>%
+  ungroup() 
+
+length(intersect(Application_Record$ID, Credit_Record_2$ID))
+summary(Credit_Record_2)
+
+Complete_DF <- inner_join(Application_Record, Credit_Record_2, by = "ID")
+
+#Remove unneeded columns from the applications data
+Columns_Dropped <- c("ID", "FLAG_MOBIL", "FLAG_WORK_PHONE", "FLAG_PHONE", "FLAG_EMAIL")
+Complete_DF <- Complete_DF %>%
+  select(-Columns_Dropped)
+
+#Change days employed and days since birth with the more natural age and years employed assuming 365 days per years and not 365.25
+Age <- Complete_DF$DAYS_BIRTH / -365
+#Pensioners DAYS_EMPLOYED set at 365243 by default, change to 0
+Complete_DF <- Complete_DF %>%
+  mutate(DAYS_EMPLOYED = ifelse(DAYS_EMPLOYED == 365243, 0 , DAYS_EMPLOYED))
+Years_Employed <- Complete_DF$DAYS_EMPLOYED / -365
+
+Complete_DF$AGE <- Age
+Complete_DF$YEARS_EMPLOYED <- Years_Employed
+
+Complete_DF <- Complete_DF %>%
+  select(-DAYS_BIRTH, -DAYS_EMPLOYED)
+
+#Define the qualitative and quantitative data
+Qualitative <- Complete_DF %>%
+  select(CODE_GENDER, FLAG_OWN_CAR, FLAG_OWN_REALTY, 
+         NAME_INCOME_TYPE, NAME_EDUCATION_TYPE, NAME_FAMILY_STATUS, 
+         NAME_HOUSING_TYPE, OCCUPATION_TYPE)
+
+
+Quantitative <- Complete_DF %>%
+  select(CNT_CHILDREN, AMT_INCOME_TOTAL, CNT_FAM_MEMBERS, AGE, YEARS_EMPLOYED)
+
+# plot(Quantitative)
+
+#Encode and scale the data
+Encoded_Qual <- dummy_cols(Qualitative,
+                           remove_first_dummy = TRUE, 
+                           remove_selected_columns = TRUE)
+Scaled_Quant <- scale(Quantitative)
+
+#We keep only the quantitative data due to complexity concerns
+
+#Define binary for a delinquent customer
+Complete_DF <- Complete_DF %>%
+  mutate(Default = if_else(Sixty_Day_Delinquency_Rate > 0, 1, 0))
+
+#Plot the proportions
+par(mfrow = c(1,1))
+Percents <- prop.table(table(Complete_DF$Default)) * 100
+Bar_Plot_Default <- barplot(Percents, 
+        main = "Loan Default Rates (%)", 
+        ylab = "Percentage",
+        names.arg = c("Good Credit", "Default"),
+        col = c("blue", "red"),
+        ylim = c(0, max(Percents) + 15)) # Set y-axis to 100%
+text(x = Bar_Plot_Default,                         # X coordinates (centers of bars)
+     y = Percents,                   # Y coordinates (height of bars)
+     labels = paste0(round(Percents, 1), "%"), # The text to display (e.g., "5.4%")
+     pos = 3,                        # Place text *above* the coordinate
+     cex = 1.2,                      # Text size
+     font = 2)
+
+
+X <- as.matrix(Scaled_Quant)
+Y <- Complete_DF$Default
+
+
+#JAGS Model
+
+N <- nrow(X)
+
+Jags_Model_String <- "
+model {
+  # Likelihood
+  for (i in 1:N) {
+    Y[i] ~ dbern(p[i])
+    logit(p[i]) <- beta0 + inprod(X[i,1:5], beta[1:5])
+  }
+
+  #Priors
+  beta0 ~ dnorm(0, 0.1) 
+  for (j in 1:5) {
+    beta[j] ~ dnorm(0,0.1)
+  }
+}
+"
+
+writeLines(Jags_Model_String, con = "Temp_Jags_Model.txt")
+
+Jags_Data <- list(
+  Y = Y,
+  X = X,
+  N =N
+)
+
+Params_To_Monitor <- c("beta0","beta") 
+
+Jags_Fit <- jags.parallel(
+  data = Jags_Data,
+  parameters.to.save = Params_To_Monitor,
+  model.file = "Temp_Jags_Model.txt",
+  n.chains = 3,
+  n.iter = 5000,
+  n.burnin = 1000,
+  n.thin = 1
+)
+
+
+#Summary and statistics
+
+Jags_Fit$BUGSoutput$summary
+
+#DIC
+DIC_Jags <- Jags_Fit$BUGSoutput$DIC
+DIC_Jags
+
+#BIC
+DIC_Samples_Jags <- Jags_Fit$BUGSoutput$sims.list$deviance
+Min_Deviance_Jags <- min(DIC_Samples_Jags)
+BIC_Jags <- Min_Deviance_Jags + 6 * log(N)
+BIC_Jags
+
+#LPML
+beta0_Samples_Jags <- Jags_Fit$BUGSoutput$sims.list$beta0
+beta_Samples_Jags <- Jags_Fit$BUGSoutput$sims.list$beta
+
+Linear_Predictors_Jags <- sweep(X %*% t(beta_Samples_Jags), 2, beta0_Samples_Jags, "+")
+Probability_Matrix_Jags <- plogis(Linear_Predictors_Jags)
+Likelihood_Matrix_Jags <- dbinom(x = Y, size = 1, prob = Probability_Matrix_Jags, log = FALSE)
+Inverse_Likelihoods_Jags <- 1 / Likelihood_Matrix_Jags
+CPO_Values_Jags <- 1 / rowMeans(Inverse_Likelihoods_Jags)
+LPML_Jags <- sum(log(CPO_Values_Jags))
+LPML_Jags
+
+#Traceplots
+Jags_MCMC <- as.mcmc(Jags_Fit)
+par(mfrow = c(2, 3))
+coda::traceplot(Jags_MCMC[, c("beta0", "beta[1]", "beta[2]", "beta[3]", "beta[4]", "beta[5]")])
+
+
+#Stan Model
+
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+K <- 5
+
+Stan_Model <- "
+data {
+  int<lower=0> N;                 // Number of observations
+  int<lower=0> K;                 // Number of covariates
+  matrix[N, K] X;                 // Design matrix
+  int<lower=0, upper=1> Y[N];     // Responses
+}
+
+parameters {
+  real beta0;                     // Intercept
+  vector[K] beta;                 // Vector of coefficients
+}
+
+model {
+  // Priors
+  beta0 ~ normal(0, sqr0, 10t(10));
+  beta  ~ normal(0, sqrt(10));
+
+  // --- Likelihood ---
+  Y ~ bernoulli_logit(beta0 + X * beta);
+}
+
+generated quantities {
+  vector[N] Log_Likelihood;
+  for (i in 1:N) {
+    Log_Likelihood[i] = bernoulli_logit_lpmf(Y[i] | beta0 + X[i] * beta);
+  }
+}
+"
+
+# 4. Prepare Data List
+Stan_Data <- list(
+  N = N,
+  K = K,
+  X = X,
+  Y = Y
+)
+
+Stan_Fit <- stan(
+  model_code = Stan_Model,
+  data = Stan_Data,
+  chains = 3,
+  iter = 2000,
+  warmup = 1000,
+)
+
+#Summary and Statistics
+print(Stan_Fit, pars = c("beta0", "beta"), probs = c(0.025, 0.5, 0.975))
+
+#DIC
+Paramters_Stan <- extract(Stan_Fit)
+beta0_Post_Stan <- Paramters_Stan$beta0
+beta_Post_Stan <- Paramters_Stan$beta
+Log_Likelihood_Stan <- Paramters_Stan$Log_Likelihood
+
+Deviance_Per_Iteration_Stan <- -2 * rowSums(Log_Likelihood_Stan)
+Mean_Deviance_Stan <- mean(Deviance_Per_Iteration_Stan)
+
+Mean_beta0_Stan <- mean(beta0_Post_Stan)
+Mean_beta_Stan <- colMeans(beta_Post_Stan)
+
+Mean_Linear_Predictor_Stan <- Mean_beta0_Stan + (X %*% Mean_beta_Stan)
+Mean_Probability_Stan <- plogis(Mean_Linear_Predictor_Stan)
+Log_Likelihood_At_Mean_Stan <- dbinom(Y, 1, prob = Mean_Probability_Stan, log = TRUE)
+Deviance_Hat_Stan <- -2 * sum(Log_Likelihood_At_Mean_Stan)
+
+Effective_Parameters_Stan <- Mean_Deviance_Stan - Deviance_Hat_Stan
+DIC_Stan <- Deviance_Hat_Stan + 2 * Effective_Parameters_Stan
+DIC_Stan
+
+#BIC
+BIC_Stan <- Deviance_Hat_Stan + 6 * log(N)
+BIC_Stan
+
+#LPML
+Likelihood_Samples_Stan <- exp(Log_Likelihood_Stan)
+CPO_Values_Stan <- 1 / colMeans(1/ Likelihood_Samples_Stan)
+LPML_Stan <- sum(log(CPO_Values_Stan))
+LPML_Stan
+
+#Traceplots
+traceplot(Stan_Fit, pars = c("beta0", "beta"))
+
+
+
+#Comparison
+Jags_Fit$BUGSoutput$summary
+
+print(Stan_Fit, pars = c("beta0", "beta"), probs = c(0.025,0.25, 0.5,0.75, 0.975))
+
+cat(" Jags DIC:", DIC_Jags, "\n", "Jags BIC:", BIC_Jags, "\n", "Jags LPML:", LPML_Jags, "\n",
+    "Stan DIC:", DIC_Stan, "\n", "Stan BIC:", BIC_Stan, "\n", "Stan LPML:", LPML_Stan, "\n")
+
+
+
+
+#Prediction for new applicant
+
+#Define some new applicants data
+New_Applicant_Raw <- c(
+  CNT_CHILDREN = 0,          
+  AMT_INCOME_TOTAL = 150000, 
+  CNT_FAM_MEMBERS = 2,       
+  AGE = 45,                  
+  YEARS_EMPLOYED = 10        
+)
+
+#Scale the new data inline with analysis
+Observation_Means <- colMeans(Quantitative)
+Observation_Sds <- apply(Quantitative, 2, sd)
+New_applicant_Scaled <- (New_Applicant_Raw - Observation_Means) / Observation_Sds
+
+#Calculate predictive probabilities using jags model
+Log_Odds_New_Applicant <- beta0_Samples_Jags + (beta_Samples_Jags %*% New_applicant_Scaled)
+Predicted_Probabilities_New_Applicant <- 1 / (1 + exp(-Log_Odds_New_Applicant))
+
+cat("Predicted Probability of Default (Mean): ", round(mean(Predicted_Probabilities_New_Applicant) * 100, 2), "%\n")
+cat("95% Credible Interval: ", 
+    round(quantile(Predicted_Probabilities_New_Applicant, 0.025) * 100, 2), "% to ", 
+    round(quantile(Predicted_Probabilities_New_Applicant, 0.975) * 100, 2), "%\n")
+```
