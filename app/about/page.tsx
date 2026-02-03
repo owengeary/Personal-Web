@@ -63,7 +63,7 @@ export default function AboutPage() {
                     <div className="bg-gray-50 p-4 rounded-lg">
                         <h3 className="font-semibold mb-2 text-gray-900">Languages</h3>
                         <div className="flex flex-wrap gap-2">
-                            {['Python', 'C++', 'TypeScript', 'SQL', 'Rust'].map(skill => (
+                            {['Python', 'R'].map(skill => (
                                 <span key={skill} className="px-2 py-1 bg-white border border-gray-200 rounded text-sm">
                                     {skill}
                                 </span>
@@ -73,7 +73,7 @@ export default function AboutPage() {
                     <div className="bg-gray-50 p-4 rounded-lg">
                         <h3 className="font-semibold mb-2 text-gray-900">Technologies & Tools</h3>
                         <div className="flex flex-wrap gap-2">
-                            {['Pandas', 'NumPy', 'PyTorch', 'Next.js', 'Docker', 'AWS'].map(skill => (
+                            {['Pandas', 'NumPy', 'PyTorch', 'AI Copilot'].map(skill => (
                                 <span key={skill} className="px-2 py-1 bg-white border border-gray-200 rounded text-sm">
                                     {skill}
                                 </span>
