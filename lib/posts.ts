@@ -20,6 +20,7 @@ export interface PostMeta {
     status?: 'Reading' | 'Read' | 'To Read'
     cover?: string
     link?: string
+    isbn?: string
     thoughts?: string // Short summary for list view
 
     // Podcast specific
