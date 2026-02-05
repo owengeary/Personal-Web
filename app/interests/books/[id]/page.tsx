@@ -37,16 +37,18 @@ export default async function BookPage({ params }: PageProps) {
             <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm mb-12">
                 <div className="flex flex-col md:flex-row">
                     {/* Image Section - Fixed Layout */}
-                    <div className="md:w-64 bg-gray-100 relative h-64 md:h-auto flex-shrink-0">
+                    <div className="md:w-80 bg-gray-50 relative flex-shrink-0 flex items-center justify-center p-8 border-r border-gray-100">
                         {meta.cover ? (
                             <Image
                                 src={meta.cover}
                                 alt={meta.title}
-                                fill
-                                className="object-cover"
+                                width={240}
+                                height={360}
+                                className="object-contain shadow-lg w-auto h-auto max-w-full rounded-sm"
+                                priority
                             />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-400">
+                            <div className="w-full h-64 flex items-center justify-center text-gray-400">
                                 <BookIcon size={48} />
                             </div>
                         )}
