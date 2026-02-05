@@ -15,18 +15,18 @@ export default async function InterestsPage() {
 
     const BookCard = ({ book }: { book: PostMeta }) => (
         <Link href={`/interests/books/${book.slug}`} className="block group">
-            <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm group-hover:shadow-md transition-all group-hover:-translate-y-1 flex sm:flex-row flex-col h-full">
-                <div className="sm:w-32 w-full relative bg-gray-100 flex-shrink-0 flex items-center justify-center group-hover:opacity-90 transition-opacity">
+            <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm group-hover:shadow-md transition-all group-hover:-translate-y-1 flex sm:flex-row flex-col">
+                <div className="w-full sm:w-40 aspect-[2/3] relative bg-gray-100 flex-shrink-0 group-hover:opacity-90 transition-opacity">
                     {book.cover ? (
                         <Image
                             src={book.cover}
                             alt={book.title}
-                            width={128}
-                            height={192}
-                            className="object-contain w-full h-auto"
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 640px) 100vw, 160px"
                         />
                     ) : (
-                        <div className="w-full h-32 flex items-center justify-center text-gray-400">
+                        <div className="w-full h-full flex items-center justify-center text-gray-400">
                             <BookIcon size={32} />
                         </div>
                     )}
